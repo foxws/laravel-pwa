@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-pwa` will be documented in this file.
 
+## 1.0.1 - 2026-03-03
+
+### What's Changed
+
+* feat: cache key by @francoism90 in https://github.com/foxws/laravel-pwa/pull/3
+
+**Full Changelog**: https://github.com/foxws/laravel-pwa/compare/1.0.0...1.0.1
+
 ## 1.0.0 - 2026-03-03
 
 **Full Changelog**: https://github.com/foxws/laravel-pwa/compare/0.0.3...1.0.0
