@@ -21,7 +21,7 @@ class GenerateSW
 
         // Read the service worker template and replace the cache name placeholder with the generated cache value
         $swContents = Str::replaceFirst(
-            'pwa-cache-v1',
+            'sw-cache-v1',
             $cacheKey,
             File::get($swSource),
         );

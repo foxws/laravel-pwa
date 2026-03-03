@@ -87,7 +87,7 @@ it('injects a generated cache name into sw.js replacing the placeholder', functi
     $contents = File::get(public_path('sw.js'));
 
     expect($contents)
-        ->not->toContain('"pwa-cache-v1"')
+        ->not->toContain('"sw-cache-v1"')
         ->toContain('"pwa-');
 });
 
