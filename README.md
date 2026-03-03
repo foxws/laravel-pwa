@@ -16,7 +16,7 @@ composer require foxws/laravel-pwa
 Publish the config file:
 
 ```bash
-php artisan vendor:publish --tag="laravel-pwa-config"
+php artisan vendor:publish --tag="pwa-config"
 ```
 
 ## Usage
