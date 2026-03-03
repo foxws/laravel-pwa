@@ -40,7 +40,7 @@ class GenerateManifestCommand extends Command
             ->values()
             ->all();
 
-        if ($icons !== []) {
+        if (filled($icons)) {
             $manifest['icons'] = $icons;
         }
 
