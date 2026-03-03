@@ -25,7 +25,7 @@ class PwaServiceProvider extends PackageServiceProvider
             ->hasCommand(GenerateManifestCommand::class);
     }
 
-    public function bootingPackage(): void
+    public function packageBooted(): void
     {
         Blade::include('pwa::components.head', 'pwa');
         Blade::include('pwa::components.body', 'sw');

@@ -1,5 +1,5 @@
-@use('Illuminate\Foundation\Vite')
 @use('Illuminate\Support\Facades\Config')
+@use('Illuminate\Support\Facades\Vite')
 
 @props([
     'scope' => '/',
