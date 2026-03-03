@@ -56,13 +56,28 @@ return [
         'theme_color' => env('PWA_THEME_COLOR', '#6777ef'),
         'lang' => env('PWA_LANG', 'en'),
         'dir' => env('PWA_DIR', 'ltr'),
-        'icons' => [
-            [
-                'src' => env('PWA_ICON_PATH', '/images/icons/icon-512x512.png'),
-                'sizes' => env('PWA_ICON_SIZES', '512x512'),
-                'type' => env('PWA_ICON_TYPE', 'image/png'),
-                'purpose' => 'any maskable',
-            ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | PWA Icons
+    |--------------------------------------------------------------------------
+    |
+    | Define the icons for your PWA manifest. Each icon entry supports a
+    | "disk" key (any configured Laravel filesystem disk) and a "path"
+    | relative to that disk's root. The URL is resolved at generation time
+    | via Storage::disk()->url(). Set "disk" to null to fall back to the
+    | asset() helper with "path" used as-is.
+    |
+    */
+
+    'icons' => [
+        [
+            'disk' => env('PWA_ICON_DISK', 'public'),
+            'path' => env('PWA_ICON_PATH', 'images/icons/icon-512x512.png'),
+            'sizes' => env('PWA_ICON_SIZES', '512x512'),
+            'type' => env('PWA_ICON_TYPE', 'image/png'),
+            'purpose' => 'any maskable',
         ],
     ],
 

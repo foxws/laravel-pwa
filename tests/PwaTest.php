@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 it('generates manifest.json in the public directory', function () {
     $path = public_path('manifest.json');
@@ -91,4 +93,76 @@ it('renders @sw directive', function () {
     expect($view)
         ->toContain('navigator.serviceWorker')
         ->toContain('.register(');
+});
+
+it('resolves icon src via storage disk url', function () {
+    Storage::fake('public');
+
+    Config::set('pwa.icons', [
+        [
+            'disk' => 'public',
+            'path' => 'images/icons/icon-512x512.png',
+            'sizes' => '512x512',
+            'type' => 'image/png',
+            'purpose' => 'any maskable',
+        ],
+    ]);
+
+    Artisan::call('pwa:generate');
+
+    $manifest = json_decode(File::get(public_path('manifest.json')), true);
+    $src = $manifest['icons'][0]['src'];
+
+    expect($src)->toBe(Storage::disk('public')->url('images/icons/icon-512x512.png'));
+});
+
+it('resolves icon src via asset helper when disk is null', function () {
+    Config::set('pwa.icons', [
+        [
+            'disk' => null,
+            'path' => 'images/icons/icon-512x512.png',
+            'sizes' => '512x512',
+            'type' => 'image/png',
+            'purpose' => 'any maskable',
+        ],
+    ]);
+
+    Artisan::call('pwa:generate');
+
+    $manifest = json_decode(File::get(public_path('manifest.json')), true);
+    $src = $manifest['icons'][0]['src'];
+
+    expect($src)->toBe(asset('images/icons/icon-512x512.png'));
+});
+
+it('resolves icon src via a custom s3 disk', function () {
+    Storage::fake('s3');
+
+    Config::set('pwa.icons', [
+        [
+            'disk' => 's3',
+            'path' => 'icons/icon-512x512.png',
+            'sizes' => '512x512',
+            'type' => 'image/png',
+            'purpose' => 'any maskable',
+        ],
+    ]);
+
+    Artisan::call('pwa:generate');
+
+    $manifest = json_decode(File::get(public_path('manifest.json')), true);
+    $src = $manifest['icons'][0]['src'];
+
+    expect($src)->toBe(Storage::disk('s3')->url('icons/icon-512x512.png'));
+});
+
+it('omits icons from manifest when icons config is empty', function () {
+    Config::set('pwa.manifest.icons', null);
+    Config::set('pwa.icons', []);
+
+    Artisan::call('pwa:generate');
+
+    $manifest = json_decode(File::get(public_path('manifest.json')), true);
+
+    expect($manifest)->not->toHaveKey('icons');
 });

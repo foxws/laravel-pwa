@@ -56,6 +56,29 @@ Or use them as Blade components:
 
 The `@sw` directive automatically picks up the CSP nonce from `Vite::cspNonce()` when set.
 
+### Icons
+
+Icons are defined in a dedicated `icons` array in `config/pwa.php`, separate from the manifest. Each entry supports a `disk` key pointing to any configured Laravel filesystem disk. The `src` URL is resolved at generation time via `Storage::disk()->url()`. Set `disk` to `null` to fall back to `asset()` with `path` used as-is.
+
+The default configuration expects a 512×512 PNG on the `public` disk. Create the storage symlink and place your icon there:
+
+```bash
+php artisan storage:link
+```
+
+```
+storage/app/public/images/icons/icon-512x512.png
+```
+
+You can override the disk and path via `.env`:
+
+```env
+PWA_ICON_DISK=public
+PWA_ICON_PATH=images/icons/icon-512x512.png
+```
+
+For S3 or other remote disks, set `PWA_ICON_DISK` to the disk name — the URL will be resolved accordingly.
+
 ### Generating the manifest and service worker
 
 ```bash
