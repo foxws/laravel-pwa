@@ -2,8 +2,8 @@
 
 namespace Foxws\Pwa\Tests;
 
-use Orchestra\Testbench\TestCase as Orchestra;
 use Foxws\Pwa\PwaServiceProvider;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
