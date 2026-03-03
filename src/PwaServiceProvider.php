@@ -2,7 +2,7 @@
 
 namespace Foxws\Pwa;
 
-use Foxws\Pwa\Commands\PwaCommand;
+use Foxws\Pwa\Commands\GenerateManifestCommand;
 use Illuminate\Support\Facades\Blade;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -20,7 +20,7 @@ class PwaServiceProvider extends PackageServiceProvider
             ->name('laravel-pwa')
             ->hasConfigFile()
             ->hasViews()
-            ->hasCommand(PwaCommand::class);
+            ->hasCommand(GenerateManifestCommand::class);
     }
 
     public function bootingPackage(): void
