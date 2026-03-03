@@ -87,6 +87,8 @@ php artisan pwa:generate
 
 This writes `public/manifest.json` from your config, and copies the `sw.js` stub to `public/sw.js`. Both paths are configurable via `config/pwa.php`.
 
+The service worker serves an offline fallback page from `public/offline.html`. You must create this file yourself — see [examples/offline.html](examples/offline.html) for a starting point.
+
 ## Configuration
 
 ```php
