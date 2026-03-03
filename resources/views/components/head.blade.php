@@ -1,9 +1,11 @@
+@use('Illuminate\Support\Facades\Config')
+
 @props([
-    'themeColor' => config('pwa.manifest.theme_color', '#000000'),
-    'icon'       => config('pwa.manifest.icons.0.src', 'logo.png'),
-    'manifest'   => '/manifest.json',
+    'themeColor' => Config::string('pwa.manifest.theme_color', '#000000'),
+    'icon' => asset(Config::string('pwa.manifest.icons.src', 'logo.png')),
+    'manifest' => asset('/manifest.json'),
 ])
 
 <meta name="theme-color" content="{{ $themeColor }}">
-<link rel="apple-touch-icon" href="{{ asset($icon) }}">
+<link rel="apple-touch-icon" href="{{ $icon }}">
 <link rel="manifest" href="{{ $manifest }}">
