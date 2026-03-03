@@ -88,15 +88,15 @@ it('injects a generated cache name into sw.js replacing the placeholder', functi
 
     expect($contents)
         ->not->toContain('"sw-cache-v1"')
-        ->toContain('"pwa-');
+        ->toContain('"sw-');
 });
 
-it('CacheKey::generate returns a pwa- prefixed timestamp string', function () {
+it('CacheKey::generate returns a sw- prefixed timestamp string', function () {
     $key = CacheKey::generate();
 
     expect($key)
-        ->toStartWith('pwa-')
-        ->toMatch('/^pwa-\d+$/');
+        ->toStartWith('sw-')
+        ->toMatch('/^sw-\d+$/');
 });
 
 it('two CacheKey::generate calls within the same second return the same value', function () {
