@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class GenerateManifestCommand extends Command
 {
@@ -17,6 +18,31 @@ class GenerateManifestCommand extends Command
     {
         // Get the manifest configuration
         $manifest = Config::array('pwa.manifest', []);
+
+        // Resolve icons from the dedicated icons config, building the src URL
+        // via the configured Storage disk (or asset() when disk is null).
+        $icons = Collection::make(Config::array('pwa.icons', []))
+            ->map(function (array $icon): array {
+                $disk = $icon['disk'] ?? null;
+                $path = $icon['path'] ?? '';
+
+                $src = $disk !== null
+                    ? Storage::disk($disk)->url($path)
+                    : asset($path);
+
+                return [
+                    'src' => $src,
+                    'sizes' => $icon['sizes'] ?? '512x512',
+                    'type' => $icon['type'] ?? 'image/png',
+                    'purpose' => $icon['purpose'] ?? 'any maskable',
+                ];
+            })
+            ->values()
+            ->all();
+
+        if ($icons !== []) {
+            $manifest['icons'] = $icons;
+        }
 
         // Filter out null values to avoid including them in the manifest
         $contents = Collection::make($manifest)
