@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-pwa` will be documented in this file.
 
+## 0.0.2 - 2026-03-03
+
+### What's Changed
+
+* feat: add support for configurable PWA icons by @francoism90 in https://github.com/foxws/laravel-pwa/pull/2
+
+**Full Changelog**: https://github.com/foxws/laravel-pwa/compare/0.0.1...0.0.2
+
 ## 0.0.1 - 2026-03-03
 
 ### What's Changed
