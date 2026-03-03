@@ -27,7 +27,7 @@ class PwaServiceProvider extends PackageServiceProvider
 
     public function bootingPackage(): void
     {
-        Blade::include('laravel-pwa::components.head', 'pwa');
-        Blade::include('laravel-pwa::components.body', 'sw');
+        Blade::include('pwa::components.head', 'pwa');
+        Blade::include('pwa::components.body', 'sw');
     }
 }
