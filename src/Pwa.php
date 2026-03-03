@@ -10,7 +10,7 @@ class Pwa
 {
     public static function basePath(string $path = ''): string
     {
-        return dirname(__DIR__) . ($path !== '' ? '/' . ltrim($path, '/') : '');
+        return dirname(__DIR__).($path !== '' ? '/'.ltrim($path, '/') : '');
     }
 
     public static function destinationPath(string $configKey, string $default = ''): string

@@ -13,6 +13,6 @@ class CacheKey
      */
     public static function generate(): string
     {
-        return 'pwa-' . (string) now()->getTimestamp();
+        return 'pwa-'.(string) now()->getTimestamp();
     }
 }
