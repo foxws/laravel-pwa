@@ -2,9 +2,9 @@
 @use('Illuminate\Support\Facades\Config')
 
 @props([
-    'swPath' => '/sw.js',
     'scope' => '/',
     'nonce' => Vite::cspNonce(),
+    'swPath' => Config::string('pwa.sw_path', 'sw.js'),
     'debug' => Config::boolean('app.debug', false),
 ])
 

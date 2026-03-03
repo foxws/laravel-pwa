@@ -24,7 +24,7 @@ class GenerateManifestCommand extends Command
             ->toArray();
 
         // Determine the output path, defaulting to public/manifest.json
-        $path = public_path($this->option('path') ?? Config::string('pwa.path', 'manifest.json'));
+        $path = public_path(Config::string('pwa.manifest_path', 'manifest.json'));
 
         // Ensure the directory exists and write the manifest.json file
         File::ensureDirectoryExists(dirname($path));
@@ -33,6 +33,14 @@ class GenerateManifestCommand extends Command
         File::put($path, json_encode($contents, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
 
         $this->components->info("Manifest written to: {$path}");
+
+        $swSource = __DIR__.'/../../resources/js/sw.js';
+        $swPath = public_path(Config::string('pwa.sw_path', 'sw.js'));
+
+        File::ensureDirectoryExists(dirname($swPath));
+        File::copy($swSource, $swPath);
+
+        $this->components->info("Service worker written to: {$swPath}");
 
         return self::SUCCESS;
     }
