@@ -104,7 +104,6 @@ it('resolves icon src via storage disk url', function () {
             'path' => 'images/icons/icon-512x512.png',
             'sizes' => '512x512',
             'type' => 'image/png',
-            'purpose' => 'any maskable',
         ],
     ]);
 
@@ -123,7 +122,6 @@ it('resolves icon src via asset helper when disk is null', function () {
             'path' => 'images/icons/icon-512x512.png',
             'sizes' => '512x512',
             'type' => 'image/png',
-            'purpose' => 'any maskable',
         ],
     ]);
 
@@ -144,7 +142,6 @@ it('resolves icon src via a custom s3 disk', function () {
             'path' => 'icons/icon-512x512.png',
             'sizes' => '512x512',
             'type' => 'image/png',
-            'purpose' => 'any maskable',
         ],
     ]);
 

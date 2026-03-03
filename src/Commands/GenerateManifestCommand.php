@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Foxws\Pwa\Commands;
 
 use Illuminate\Console\Command;
@@ -30,12 +32,7 @@ class GenerateManifestCommand extends Command
                     ? Storage::disk($disk)->url($path)
                     : asset($path);
 
-                return [
-                    'src' => $src,
-                    'sizes' => $icon['sizes'] ?? '512x512',
-                    'type' => $icon['type'] ?? 'image/png',
-                    'purpose' => $icon['purpose'] ?? 'any maskable',
-                ];
+                return array_merge($icon, ['src' => $src]);
             })
             ->values()
             ->all();
