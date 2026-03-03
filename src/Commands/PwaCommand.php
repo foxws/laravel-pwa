@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Foxws\Pwa\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class PwaCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'laravel-pwa';
 
     public $description = 'My command';
 
