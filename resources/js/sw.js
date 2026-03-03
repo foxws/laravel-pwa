@@ -1,7 +1,5 @@
 "use strict";
 
-// Bump this version string on every deploy — the activate handler will delete
-// the old cache, ensuring users receive fresh assets instead of stale ones.
 const CACHE_NAME = "pwa-cache-v1";
 const OFFLINE_URL = "/offline.html";
 
@@ -42,6 +40,13 @@ function isCacheable(response) {
 
 self.addEventListener("fetch", (event) => {
     if (event.request.method !== "GET") return;
+
+    // Range requests (e.g. video/audio streaming chunks) must bypass the cache —
+    // returning a full cached response for a partial request breaks media seeking.
+    if (event.request.headers.get("Range")) {
+        event.respondWith(fetch(event.request));
+        return;
+    }
 
     // Inertia XHR requests carry an X-Inertia header and must always go to
     // the network — caching their JSON responses would cause stale page data.

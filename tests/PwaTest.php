@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Foxws\Pwa\Support\CacheKey;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Config;
@@ -78,6 +79,28 @@ it('respects sw_path config for service worker location', function () {
     expect(File::exists($path))->toBeTrue();
 
     File::delete($path);
+});
+
+it('injects a generated cache name into sw.js replacing the placeholder', function () {
+    Artisan::call('pwa:generate');
+
+    $contents = File::get(public_path('sw.js'));
+
+    expect($contents)
+        ->not->toContain('"pwa-cache-v1"')
+        ->toContain('"pwa-');
+});
+
+it('CacheKey::generate returns a pwa- prefixed timestamp string', function () {
+    $key = CacheKey::generate();
+
+    expect($key)
+        ->toStartWith('pwa-')
+        ->toMatch('/^pwa-\d+$/');
+});
+
+it('two CacheKey::generate calls within the same second return the same value', function () {
+    expect(CacheKey::generate())->toBe(CacheKey::generate());
 });
 
 it('renders @pwaHead directive', function () {
