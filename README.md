@@ -23,16 +23,16 @@ php artisan vendor:publish --tag="pwa-config"
 
 ### Blade directives
 
-Add `@pwa` inside your `<head>` and `@sw` just before `</body>`:
+Add `@pwaHead` inside your `<head>` and `@pwaSw` just before `</body>`:
 
 ```blade
 <head>
-    @pwa
+    @pwaHead
 </head>
 
 <body>
     ...
-    @sw
+    @pwaSw
 </body>
 ```
 
@@ -41,43 +41,53 @@ This renders the theme-color meta tag, apple-touch-icon, manifest link, and the 
 Both directives accept optional overrides:
 
 ```blade
-@pwa(['themeColor' => '#ff0000', 'manifest' => '/custom.json'])
+@pwaHead(['themeColor' => '#ff0000', 'manifest' => '/custom.json'])
 
-@sw(['swPath' => '/sw.js', 'scope' => '/', 'debug' => true])
+@pwaSw(['swPath' => '/sw.js', 'scope' => '/', 'debug' => true])
 ```
 
 Or use them as Blade components:
 
 ```blade
-<x-pwa theme-color="#ff0000" />
+<x-pwa-head theme-color="#ff0000" />
 
-<x-sw sw-path="/sw.js" scope="/" />
+<x-pwa-sw sw-path="/sw.js" scope="/" />
 ```
 
-The `@sw` directive automatically picks up the CSP nonce from `Vite::cspNonce()` when set.
+The `@pwaSw` directive automatically picks up the CSP nonce from `Vite::cspNonce()` when set.
 
 ### Icons
 
 Icons are defined in a dedicated `icons` array in `config/pwa.php`, separate from the manifest. Each entry supports a `disk` key pointing to any configured Laravel filesystem disk. The `src` URL is resolved at generation time via `Storage::disk()->url()`. Set `disk` to `null` to fall back to `asset()` with `path` used as-is.
 
-The default configuration expects a 512×512 PNG on the `public` disk. Create the storage symlink and place your icon there:
+The default configuration ships with two icons — a **mobile** icon (192×192) and a **desktop** icon (512×512). Create the storage symlink and place both files there:
 
 ```bash
 php artisan storage:link
 ```
 
 ```
+storage/app/public/images/icons/icon-192x192.png
 storage/app/public/images/icons/icon-512x512.png
 ```
 
-You can override the disk and path via `.env`:
+You can override each icon independently via `.env`:
 
 ```env
+# Mobile icon (192×192)
 PWA_ICON_DISK=public
-PWA_ICON_PATH=images/icons/icon-512x512.png
+PWA_ICON_MOBILE_PATH=images/icons/icon-192x192.png
+PWA_ICON_MOBILE_SIZES=192x192
+PWA_ICON_MOBILE_TYPE=image/png
+
+# Desktop icon (512×512)
+PWA_ICON_DESKTOP_DISK=public
+PWA_ICON_DESKTOP_PATH=images/icons/icon-512x512.png
+PWA_ICON_DESKTOP_SIZES=512x512
+PWA_ICON_DESKTOP_TYPE=image/png
 ```
 
-For S3 or other remote disks, set `PWA_ICON_DISK` to the disk name — the URL will be resolved accordingly.
+For S3 or other remote disks, set the respective `_DISK` variable to the disk name — the URL will be resolved accordingly. Each icon can live on a different disk.
 
 ### Generating the manifest and service worker
 
@@ -99,18 +109,41 @@ return [
     'sw_path'       => env('PWA_SW_PATH', 'sw.js'),
 
     'manifest' => [
-        'id'          => env('PWA_ID', '/'),
-        'name'        => env('APP_NAME', 'Laravel'),
-        'short_name'  => env('PWA_SHORT_NAME', 'Laravel'),
-        'start_url'   => env('PWA_START_URL', '/'),
-        'display'     => env('PWA_DISPLAY', 'standalone'),
-        'theme_color' => env('PWA_THEME_COLOR', '#6777ef'),
-        // ...
+        'id'             => env('PWA_ID', '/'),
+        'name'           => env('APP_NAME', 'Laravel'),
+        'short_name'     => env('PWA_SHORT_NAME', 'Laravel'),
+        'description'    => env('PWA_DESCRIPTION', 'A Progressive Web Application setup for Laravel projects.'),
+        'start_url'      => env('PWA_START_URL', '/'),
+        'scope'          => env('PWA_SCOPE', '/'),
+        'display_override' => ['fullscreen', 'standalone'],
+        'display'        => env('PWA_DISPLAY', 'fullscreen'),
+        'orientation'    => env('PWA_ORIENTATION', 'any'),
+        'background_color' => env('PWA_BACKGROUND_COLOR', '#ffffff'),
+        'theme_color'    => env('PWA_THEME_COLOR', '#6777ef'),
+        'lang'           => env('PWA_LANG', 'en'),
+        'dir'            => env('PWA_DIR', 'ltr'),
+    ],
+
+    'icons' => [
+        // Mobile icon
+        [
+            'disk'  => env('PWA_ICON_DISK', 'public'),
+            'path'  => env('PWA_ICON_MOBILE_PATH', 'images/icons/icon-192x192.png'),
+            'sizes' => env('PWA_ICON_MOBILE_SIZES', '192x192'),
+            'type'  => env('PWA_ICON_MOBILE_TYPE', 'image/png'),
+        ],
+        // Desktop icon
+        [
+            'disk'  => env('PWA_ICON_DESKTOP_DISK', 'public'),
+            'path'  => env('PWA_ICON_DESKTOP_PATH', 'images/icons/icon-512x512.png'),
+            'sizes' => env('PWA_ICON_DESKTOP_SIZES', '512x512'),
+            'type'  => env('PWA_ICON_DESKTOP_TYPE', 'image/png'),
+        ],
     ],
 ];
 ```
 
-Any key set to `null` in the manifest array is omitted from the generated JSON. Advanced keys such as `shortcuts`, `screenshots`, `categories`, and `display_override` are pre-defined in the config as `null` — uncomment and fill them in as needed.
+Any key set to `null` in the manifest array is omitted from the generated JSON. Advanced keys such as `shortcuts`, `screenshots`, and `categories` can be added to the manifest array as needed.
 
 ## Testing
 

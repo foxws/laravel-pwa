@@ -78,8 +78,8 @@ it('respects sw_path config for service worker location', function () {
     File::delete($path);
 });
 
-it('renders @pwa directive', function () {
-    $view = Blade::render('@pwa');
+it('renders @pwaHead directive', function () {
+    $view = Blade::render('@pwaHead');
 
     expect($view)
         ->toContain('<meta name="theme-color"')
@@ -87,8 +87,8 @@ it('renders @pwa directive', function () {
         ->toContain('<link rel="manifest"');
 });
 
-it('renders @sw directive', function () {
-    $view = Blade::render('@sw');
+it('renders @pwaSw directive', function () {
+    $view = Blade::render('@pwaSw');
 
     expect($view)
         ->toContain('navigator.serviceWorker')

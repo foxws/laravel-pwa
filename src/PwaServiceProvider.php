@@ -27,7 +27,7 @@ class PwaServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        Blade::include('pwa::components.head', 'pwa');
-        Blade::include('pwa::components.body', 'sw');
+        Blade::include('pwa::components.head', 'pwaHead');
+        Blade::include('pwa::components.body', 'pwaSw');
     }
 }
