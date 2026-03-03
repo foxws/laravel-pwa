@@ -1,60 +1,91 @@
-# This is my package laravel-pwa
+# laravel-pwa
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/foxws/laravel-pwa.svg?style=flat-square)](https://packagist.org/packages/foxws/laravel-pwa)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/foxws/laravel-pwa/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/foxws/laravel-pwa/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/foxws/laravel-pwa/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/foxws/laravel-pwa/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/foxws/laravel-pwa.svg?style=flat-square)](https://packagist.org/packages/foxws/laravel-pwa)
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/laravel-pwa.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/laravel-pwa)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+A minimal, opinionated Progressive Web App (PWA) package for Laravel. It provides Blade directives for the PWA head and service worker registration, and an Artisan command to generate your `manifest.json` and publish a `sw.js` stub.
 
 ## Installation
-
-You can install the package via composer:
 
 ```bash
 composer require foxws/laravel-pwa
 ```
 
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag="laravel-pwa-migrations"
-php artisan migrate
-```
-
-You can publish the config file with:
+Publish the config file:
 
 ```bash
 php artisan vendor:publish --tag="laravel-pwa-config"
 ```
 
-This is the contents of the published config file:
+## Usage
+
+### Blade directives
+
+Add `@pwa` inside your `<head>` and `@sw` just before `</body>`:
+
+```blade
+<head>
+    @pwa
+</head>
+
+<body>
+    ...
+    @sw
+</body>
+```
+
+This renders the theme-color meta tag, apple-touch-icon, manifest link, and the service worker registration script.
+
+Both directives accept optional overrides:
+
+```blade
+@pwa(['themeColor' => '#ff0000', 'manifest' => '/custom.json'])
+
+@sw(['swPath' => '/sw.js', 'scope' => '/', 'debug' => true])
+```
+
+Or use them as Blade components:
+
+```blade
+<x-pwa theme-color="#ff0000" />
+
+<x-sw sw-path="/sw.js" scope="/" />
+```
+
+The `@sw` directive automatically picks up the CSP nonce from `Vite::cspNonce()` when set.
+
+### Generating the manifest and service worker
+
+```bash
+php artisan pwa:generate
+```
+
+This writes `public/manifest.json` from your config, and copies the `sw.js` stub to `public/sw.js`. Both paths are configurable via `config/pwa.php`.
+
+## Configuration
 
 ```php
+// config/pwa.php
+
 return [
+    'manifest_path' => env('PWA_MANIFEST_PATH', 'manifest.json'),
+    'sw_path'       => env('PWA_SW_PATH', 'sw.js'),
+
+    'manifest' => [
+        'id'          => env('PWA_ID', '/'),
+        'name'        => env('APP_NAME', 'Laravel'),
+        'short_name'  => env('PWA_SHORT_NAME', 'Laravel'),
+        'start_url'   => env('PWA_START_URL', '/'),
+        'display'     => env('PWA_DISPLAY', 'standalone'),
+        'theme_color' => env('PWA_THEME_COLOR', '#6777ef'),
+        // ...
+    ],
 ];
 ```
 
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="laravel-pwa-views"
-```
-
-## Usage
-
-```php
-$pwa = new Foxws\Pwa();
-echo $pwa->echoPhrase('Hello, Foxws!');
-```
+Any key set to `null` in the manifest array is omitted from the generated JSON. Advanced keys such as `shortcuts`, `screenshots`, `categories`, and `display_override` are pre-defined in the config as `null` — uncomment and fill them in as needed.
 
 ## Testing
 
