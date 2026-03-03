@@ -19,7 +19,7 @@ return [
 
     'manifest' => [
         'name' => env('APP_NAME', 'Laravel'),
-        'short_name' => env('APP_SHORT_NAME', 'Laravel'),
+        'short_name' => env('PWA_SHORT_NAME', 'Laravel'),
         'background_color' => env('PWA_BACKGROUND_COLOR', '#ffffff'),
         'display' => env('PWA_DISPLAY', 'standalone'),
         'description' => env('PWA_DESCRIPTION', 'A Progressive Web Application setup for Laravel projects.'),
