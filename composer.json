@@ -1,10 +1,15 @@
 {
     "name": "foxws/laravel-pwa",
-    "description": "This is my package laravel-pwa",
+    "description": "PWA manifest and Blade directives for Laravel.",
     "keywords": [
-        "Foxws",
+        "foxws",
         "laravel",
-        "laravel-pwa"
+        "laravel-pwa",
+        "pwa",
+        "progressive-web-app",
+        "manifest",
+        "service-worker",
+        "blade"
     ],
     "homepage": "https://github.com/foxws/laravel-pwa",
     "license": "MIT",
