@@ -89,6 +89,6 @@ it('renders @sw directive', function () {
     $view = Blade::render('@sw');
 
     expect($view)
-        ->toContain("navigator.serviceWorker")
+        ->toContain('navigator.serviceWorker')
         ->toContain('.register(');
 });
