@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Foxws\Pwa\Support;
 
 use Foxws\Pwa\Pwa;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
@@ -13,7 +14,7 @@ class GenerateSW
     public static function run(): void
     {
         $swSource = Pwa::basePath('resources/js/sw.js');
-        $swPath = Pwa::destinationPath('pwa.sw_path', 'sw.js');
+        $swPath = Pwa::destinationPath(Config::string('pwa.sw_path'));
 
         // Generate a cache name based on the current timestamp to ensure it changes on each generation
         $cacheKey = CacheKey::generate();

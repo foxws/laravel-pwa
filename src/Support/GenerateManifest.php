@@ -43,7 +43,7 @@ class GenerateManifest
             ->toArray();
 
         // Determine the output path for the manifest.json file, defaulting to public/manifest.json
-        $path = Pwa::destinationPath('pwa.manifest_path', 'manifest.json');
+        $path = Pwa::destinationPath(Config::string('pwa.manifest_path'));
 
         // Ensure the output directory exists before writing the manifest file
         File::ensureDirectoryExists(dirname($path));

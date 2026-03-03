@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Foxws\Pwa;
 
-use Illuminate\Support\Facades\Config;
-
 class Pwa
 {
     public static function basePath(string $path = ''): string
@@ -13,8 +11,8 @@ class Pwa
         return dirname(__DIR__).($path !== '' ? '/'.ltrim($path, '/') : '');
     }
 
-    public static function destinationPath(string $configKey, string $default = ''): string
+    public static function destinationPath(string $path): string
     {
-        return public_path(Config::string($configKey, $default));
+        return public_path($path);
     }
 }
