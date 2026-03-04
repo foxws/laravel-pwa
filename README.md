@@ -103,7 +103,7 @@ The service worker serves an offline fallback page from `public/offline.html`. Y
 return [
     'manifest_path' => env('PWA_MANIFEST_PATH', 'manifest.json'),
     'sw_path'       => env('PWA_SW_PATH', 'sw.js'),
-
+    'ignore_paths'  => ['/api/', '/livewire/', '/_inertia/'],
     'manifest' => [
         'id'             => env('PWA_ID', '/'),
         'name'           => env('APP_NAME', 'Laravel'),
@@ -119,7 +119,6 @@ return [
         'lang'           => env('PWA_LANG', 'en'),
         'dir'            => env('PWA_DIR', 'ltr'),
     ],
-
     'icons' => [
         // Mobile icon
         [
@@ -136,7 +135,6 @@ return [
             'type'  => env('PWA_ICON_DESKTOP_TYPE', 'image/png'),
         ],
     ],
-
     'apple_touch_icon' => env('PWA_APPLE_TOUCH_ICON', '/storage/images/icons/apple-touch-icon.png'),
 ];
 ```
