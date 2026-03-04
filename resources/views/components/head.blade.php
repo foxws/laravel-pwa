@@ -2,8 +2,8 @@
 
 @props([
     'themeColor' => Config::string('pwa.manifest.theme_color', '#000000'),
-    'icon' => Config::string('pwa.apple_touch_icon', 'logo.png'),
-    'manifest' => Config::string('pwa.manifest_path', 'manifest.json'),
+    'icon' => asset(Config::string('pwa.apple_touch_icon', 'logo.png')),
+    'manifest' => asset(Config::string('pwa.manifest_path', 'manifest.json')),
 ])
 
 <meta name="theme-color" content="{{ $themeColor }}">

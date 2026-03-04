@@ -4,7 +4,7 @@
 @props([
     'scope' => '/',
     'nonce' => Vite::cspNonce(),
-    'swPath' => Config::string('pwa.sw_path', 'sw.js'),
+    'swPath' => asset(Config::string('pwa.sw_path', 'sw.js')),
     'debug' => Config::boolean('app.debug', false),
 ])
 
