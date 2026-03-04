@@ -19,11 +19,21 @@ class GenerateSW
         // Generate a cache name based on the current timestamp to ensure it changes on each generation
         $cacheKey = CacheKey::generate();
 
+        // Get the ignored paths from config
+        $ignoredPaths = Pwa::ignorePaths();
+
         // Read the service worker template and replace the cache name placeholder with the generated cache value
         $swContents = Str::replaceFirst(
-            'sw-cache-v1',
+            'CACHE_KEY_PLACEHOLDER',
             $cacheKey,
             File::get($swSource),
+        );
+
+        // Replace the placeholder for ignored paths with the actual paths from config
+        $swContents = Str::replaceFirst(
+            'IGNORED_PATHS_PLACEHOLDER',
+            $ignoredPaths,
+            $swContents,
         );
 
         // Ensure the output directory exists before writing the service worker file

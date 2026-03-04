@@ -19,6 +19,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | PWA Service Worker Ignored Paths
+    |--------------------------------------------------------------------------
+    |
+    | Define URL path prefixes that the service worker should never intercept
+    | or cache. Any request whose pathname starts with one of these values
+    | will be passed directly to the network, bypassing all SW logic.
+    |
+    */
+
+    'ignore_paths' => env('PWA_IGNORE_PATHS', ['/api/', '/livewire/', '/_inertia/']),
+
+    /*
+    |--------------------------------------------------------------------------
     | PWA Service Worker Path
     |--------------------------------------------------------------------------
     |

@@ -1,6 +1,7 @@
 "use strict";
 
-const CACHE_KEY = "sw-cache-v1";
+const CACHE_KEY = "CACHE_KEY_PLACEHOLDER";
+const IGNORED_PATHS = [IGNORED_PATHS_PLACEHOLDER];
 const OFFLINE_URL = "/offline.html";
 
 self.addEventListener("install", (event) => {
@@ -9,7 +10,7 @@ self.addEventListener("install", (event) => {
     event.waitUntil(
         caches
             .open(CACHE_KEY)
-            .then((cache) => cache.add(OFFLINE_URL).catch(() => {}))
+            .then((cache) => cache.add(OFFLINE_URL).catch(() => { }))
             .then(() => self.skipWaiting()),
     );
 });
@@ -33,13 +34,31 @@ self.addEventListener("activate", (event) => {
  * Only cache a response when it is a valid, non-opaque 2xx response.
  * Caching opaque responses (cross-origin without CORS) or error responses
  * would poison the cache with unusable entries.
+ * Responses with cache-control: no-cache or private must not be stored.
  */
 function isCacheable(response) {
-    return response && response.status === 200 && response.type !== "opaque";
+    if (!response || response.status !== 200 || response.type === "opaque") {
+        return false;
+    }
+
+    const cc = response.headers.get("cache-control") ?? "";
+    if (
+        cc.includes("no-cache") ||
+        cc.includes("no-store") ||
+        cc.includes("private")
+    ) {
+        return false;
+    }
+
+    return true;
 }
 
 self.addEventListener("fetch", (event) => {
     if (event.request.method !== "GET") return;
+
+    // Bypass the service worker entirely for ignored path prefixes (e.g. /api/).
+    const requestPath = new URL(event.request.url).pathname;
+    if (IGNORED_PATHS.some((prefix) => requestPath.startsWith(prefix))) return;
 
     // Range requests (e.g. video/audio streaming chunks) must bypass the cache —
     // returning a full cached response for a partial request breaks media seeking.
