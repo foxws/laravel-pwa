@@ -1,4 +1,4 @@
-# laravel-pwa
+# Laravel PWA
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/foxws/laravel-pwa.svg?style=flat-square)](https://packagist.org/packages/foxws/laravel-pwa)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/foxws/laravel-pwa/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/foxws/laravel-pwa/actions?query=workflow%3Arun-tests+branch%3Amain)
