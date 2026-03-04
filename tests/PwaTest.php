@@ -140,11 +140,11 @@ it('resolves icon src via storage disk url', function () {
     expect($src)->toBe(Storage::disk('public')->url('images/icons/icon-512x512.png'));
 });
 
-it('resolves icon src via asset helper when disk is null', function () {
+it('resolves icon src via path when disk is null', function () {
     Config::set('pwa.icons', [
         [
             'disk' => null,
-            'path' => 'images/icons/icon-512x512.png',
+            'path' => '/storage/images/icons/icon-512x512.png',
             'sizes' => '512x512',
             'type' => 'image/png',
         ],
