@@ -88,7 +88,6 @@ return [
     /**
      * The Apple Touch Icon is used by iOS devices when a user adds the web application to their home screen.
      */
-
     'apple_touch_icon' => env('PWA_APPLE_TOUCH_ICON', '/storage/images/icons/apple-touch-icon.png'),
 
 ];
