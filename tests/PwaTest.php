@@ -155,7 +155,7 @@ it('resolves icon src via asset helper when disk is null', function () {
     $manifest = json_decode(File::get(public_path('manifest.json')), true);
     $src = $manifest['icons'][0]['src'];
 
-    expect($src)->toBe(asset('images/icons/icon-512x512.png'));
+    expect($src)->toBe('/storage/images/icons/icon-512x512.png');
 });
 
 it('resolves icon src via a custom s3 disk', function () {

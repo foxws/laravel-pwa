@@ -60,15 +60,17 @@ The `@pwaSw` directive automatically picks up the CSP nonce from `Vite::cspNonce
 
 ### Icons
 
-Icons are defined in a dedicated `icons` array in `config/pwa.php`, separate from the manifest. Each entry supports a `disk` key pointing to any configured Laravel filesystem disk. The `src` URL is resolved at generation time via `Storage::disk()->url()`. Set `disk` to `null` to fall back to `asset()` with `path` used as-is.
+Icons are defined in a dedicated `icons` array in `config/pwa.php`, separate from the manifest. Each entry supports a `disk` key pointing to any configured Laravel filesystem disk. The `src` URL is resolved at generation time via `Storage::disk()->url()`. Set `disk` to `null` to fall back to `path` used as-is.
 
-The default configuration ships with two icons — a **mobile** icon (192×192) and a **desktop** icon (512×512). Create the storage symlink and place both files there:
+The default configuration assumes three icons — a **mobile** icon (192×192), a **desktop** icon (512×512), and an **apple-touch-icon**. Create the storage symlink and place all files there:
 
 ```bash
 php artisan storage:link
 ```
 
-```
+```bash
+$ ls storage/app/public/images/icons
+storage/app/public/images/icons/apple-touch-icon.png
 storage/app/public/images/icons/icon-192x192.png
 storage/app/public/images/icons/icon-512x512.png
 ```
@@ -76,17 +78,9 @@ storage/app/public/images/icons/icon-512x512.png
 You can override each icon independently via `.env`:
 
 ```env
-# Mobile icon (192×192)
-PWA_ICON_DISK=public
-PWA_ICON_MOBILE_PATH=images/icons/icon-192x192.png
-PWA_ICON_MOBILE_SIZES=192x192
-PWA_ICON_MOBILE_TYPE=image/png
-
-# Desktop icon (512×512)
-PWA_ICON_DISK=public
-PWA_ICON_DESKTOP_PATH=images/icons/icon-512x512.png
-PWA_ICON_DESKTOP_SIZES=512x512
-PWA_ICON_DESKTOP_TYPE=image/png
+PWA_ICON_MOBILE_PATH=/storage/images/icons/icon-192x192.png
+PWA_ICON_DESKTOP_PATH=/storage/images/icons/icon-512x512.png
+PWA_APPLE_TOUCH_ICON=/storage/images/icons/apple-touch-icon.png
 ```
 
 For S3 or other remote disks, set the respective `_DISK` variable to the disk name — the URL will be resolved accordingly. Each icon can live on a different disk.
@@ -136,12 +130,14 @@ return [
         ],
         // Desktop icon
         [
-            'disk'  => env('PWA_ICON_DESKTOP_DISK', 'public'),
+            'disk'  => env('PWA_ICON_DISK', 'public'),
             'path'  => env('PWA_ICON_DESKTOP_PATH', 'images/icons/icon-512x512.png'),
             'sizes' => env('PWA_ICON_DESKTOP_SIZES', '512x512'),
             'type'  => env('PWA_ICON_DESKTOP_TYPE', 'image/png'),
         ],
     ],
+
+    'apple_touch_icon' => env('PWA_APPLE_TOUCH_ICON', 'images/icons/apple-touch-icon.png'),
 ];
 ```
 

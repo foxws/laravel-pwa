@@ -17,22 +17,22 @@ class GenerateManifest
         $manifest = Config::array('pwa.manifest', []);
 
         // Resolve icons from the dedicated icons config, building the src URL
-        // via the configured Storage disk (or asset() when disk is null)
+        // via the configured Storage disk or path when disk is null
         $icons = Collection::make(Config::array('pwa.icons', []))
             ->map(function (array $icon): array {
                 $disk = $icon['disk'] ?? null;
                 $path = $icon['path'] ?? '';
 
-                $src = $disk !== null
+                $src = filled($disk)
                     ? Storage::disk($disk)->url($path)
-                    : asset($path);
+                    : $path;
 
                 return array_merge($icon, ['src' => $src]);
             })
             ->values()
             ->all();
 
-        // Only include the icons key in the manifest if there are icons configured, to avoid an empty icons array in the output
+        // Only include the icons key in the manifest if there are icons configured
         if (filled($icons)) {
             $manifest['icons'] = $icons;
         }
