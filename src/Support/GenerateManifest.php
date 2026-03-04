@@ -27,7 +27,12 @@ class GenerateManifest
                     ? Storage::disk($disk)->url($path)
                     : $path;
 
-                return array_merge($icon, ['src' => $src]);
+                return array_filter([
+                    'src' => $src,
+                    'sizes' => $icon['sizes'] ?? '',
+                    'type' => $icon['type'] ?? null,
+                    'purpose' => $icon['purpose'] ?? 'any',
+                ]);
             })
             ->values()
             ->all();
