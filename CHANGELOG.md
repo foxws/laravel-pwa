@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-pwa` will be documented in this file.
 
+## 1.9.0 - 2026-03-17
+
+### What's Changed
+
+* build(deps): bump ramsey/composer-install from 3 to 4 by @dependabot[bot] in https://github.com/foxws/laravel-pwa/pull/4
+
+### New Contributors
+
+* @dependabot[bot] made their first contribution in https://github.com/foxws/laravel-pwa/pull/4
+
+**Full Changelog**: https://github.com/foxws/laravel-pwa/compare/1.0.8...1.9.0
+
 ## 1.0.8 - 2026-03-07
 
 **Full Changelog**: https://github.com/foxws/laravel-pwa/compare/1.0.7...1.0.8
