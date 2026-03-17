@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Foxws\Pwa\Support;
 
 use Foxws\Pwa\Pwa;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -18,34 +17,29 @@ class GenerateManifest
 
         // Resolve icons from the dedicated icons config, building the src URL
         // via the configured Storage disk or path when disk is null
-        $icons = Collection::make(Config::array('pwa.icons', []))
-            ->map(function (array $icon): array {
-                $disk = $icon['disk'] ?? null;
-                $path = $icon['path'] ?? '';
+        $icons = array_values(array_map(function (array $icon): array {
+            $disk = $icon['disk'] ?? null;
+            $path = $icon['path'] ?? '';
 
-                $src = filled($disk)
-                    ? Storage::disk($disk)->url($path)
-                    : $path;
+            $src = filled($disk)
+                ? Storage::disk($disk)->url($path)
+                : $path;
 
-                return array_filter([
-                    'src' => $src,
-                    'sizes' => $icon['sizes'] ?? '',
-                    'type' => $icon['type'] ?? null,
-                    'purpose' => $icon['purpose'] ?? 'any',
-                ]);
-            })
-            ->values()
-            ->all();
+            return array_filter([
+                'src' => $src,
+                'sizes' => $icon['sizes'] ?? '',
+                'type' => $icon['type'] ?? null,
+                'purpose' => $icon['purpose'] ?? 'any',
+            ]);
+        }, Config::array('pwa.icons', [])));
 
         // Only include the icons key in the manifest if there are icons configured
         if (filled($icons)) {
             $manifest['icons'] = $icons;
         }
 
-        // Filter out null values to avoid including them in the manifest
-        $contents = Collection::make($manifest)
-            ->filter()
-            ->toArray();
+        // Filter out falsy values to avoid including them in the manifest
+        $contents = array_filter($manifest);
 
         // Determine the output path for the manifest.json file, defaulting to public/manifest.json
         $path = Pwa::destinationPath(Config::string('pwa.manifest_path'));

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Foxws\Pwa;
 
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 
 class Pwa
@@ -23,8 +22,6 @@ class Pwa
     {
         $paths = Config::array('pwa.ignore_paths', []);
 
-        return Collection::make($paths)
-            ->map(fn (string $path): string => "'{$path}'")
-            ->implode(', ');
+        return implode(', ', array_map(fn (string $path): string => "'{$path}'", $paths));
     }
 }
