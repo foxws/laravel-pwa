@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-pwa` will be documented in this file.
 
+## 2.0.0 - 2026-03-18
+
+**Full Changelog**: https://github.com/foxws/laravel-pwa/compare/1.9.0...2.0.0
+
 ## 1.9.0 - 2026-03-17
 
 ### What's Changed
