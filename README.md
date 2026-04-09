@@ -95,12 +95,23 @@ This writes `public/manifest.json` from your config, and copies the `sw.js` stub
 
 The service worker serves an offline fallback page from `public/offline.html`. You must create this file yourself — see [examples/offline.html](examples/offline.html) for a starting point.
 
+### Disabling the service worker
+
+Set `PWA_ENABLED=false` in your `.env` to disable the service worker in local or staging environments. When disabled, `pwa:generate` writes a self-unregistering service worker instead — on the next page load, any previously installed SW will silently clear its caches and remove itself. No Blade changes are required.
+
+```env
+PWA_ENABLED=false
+```
+
+The `@pwaHead` directive and `manifest.json` are unaffected; only the service worker behaviour changes.
+
 ## Configuration
 
 ```php
 // config/pwa.php
 
 return [
+    'enabled'       => env('PWA_ENABLED', true),
     'manifest_path' => env('PWA_MANIFEST_PATH', 'manifest.json'),
     'sw_path'       => env('PWA_SW_PATH', 'sw.js'),
     'ignore_paths'  => ['/api/', '/livewire/', '/_inertia/'],
@@ -150,6 +161,12 @@ composer test
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+
+## AI Assistance
+
+This package is developed with AI assistance, primarily using [GitHub Copilot](https://github.com/features/copilot) and [Claude Sonnet](https://www.anthropic.com/claude).
+
+AI tools are used for suggestions and development acceleration. All final implementation decisions, code review, and adjustments are made by the maintainers. AI-generated contributions are welcome in pull requests, provided that a person is actively involved in the implementation and review process.
 
 ## Contributing
 
