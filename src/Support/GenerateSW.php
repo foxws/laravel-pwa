@@ -17,17 +17,11 @@ class GenerateSW
         // Ensure the output directory exists before writing the service worker file
         File::ensureDirectoryExists(dirname($swPath));
 
-        if (! Config::boolean('pwa.enabled', true)) {
-            // Write a self-unregistering SW so any previously cached assets are
-            // cleared and the service worker is removed on the next page load.
-            File::put($swPath, self::unregisterScript());
+        $swSource = Config::boolean('pwa.enabled', true)
+            ? Pwa::basePath('resources/js/sw.js')
+            : Pwa::basePath('resources/js/sw-unregister.js');
 
-            return;
-        }
-
-        $swSource = Pwa::basePath('resources/js/sw.js');
-
-        // Replace both placeholders in a single pass
+        // Replace both placeholders in a single pass (no-op for the unregister script)
         $swContents = str_replace(
             ['CACHE_KEY_PLACEHOLDER', 'IGNORED_PATHS_PLACEHOLDER'],
             [CacheKey::generate(), Pwa::ignorePaths()],
@@ -36,23 +30,5 @@ class GenerateSW
 
         // Write the service worker file
         File::put($swPath, $swContents);
-    }
-
-    private static function unregisterScript(): string
-    {
-        return <<<'JS'
-"use strict";
-
-self.addEventListener("install", () => self.skipWaiting());
-
-self.addEventListener("activate", (event) => {
-    event.waitUntil(
-        caches
-            .keys()
-            .then((keys) => Promise.all(keys.map((key) => caches.delete(key))))
-            .then(() => self.registration.unregister()),
-    );
-});
-JS;
     }
 }
