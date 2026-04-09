@@ -55,3 +55,4 @@ self.addEventListener("activate", (event) => {
 });
 JS;
     }
+}
