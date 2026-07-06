@@ -2,6 +2,16 @@
 
 All notable changes to `laravel-pwa` will be documented in this file.
 
+## 2.2.0 - 2026-07-06
+
+### What's Changed
+
+* build(deps): bump dependabot/fetch-metadata from 3.0.0 to 3.1.0 by @dependabot[bot] in https://github.com/foxws/laravel-pwa/pull/7
+* Add update interval by @francoism90 in https://github.com/foxws/laravel-pwa/pull/9
+* build(deps): bump actions/checkout from 6 to 7 by @dependabot[bot] in https://github.com/foxws/laravel-pwa/pull/8
+
+**Full Changelog**: https://github.com/foxws/laravel-pwa/compare/2.1.0...2.2.0
+
 ## 2.1.0 - 2026-04-09
 
 ### What's Changed
