@@ -128,6 +128,6 @@ return [
     |
     */
 
-    'update_interval' => env('PWA_UPDATE_INTERVAL', 8),
+    'update_interval' => env('PWA_UPDATE_INTERVAL', 24),
 
 ];

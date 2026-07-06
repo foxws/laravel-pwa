@@ -6,7 +6,7 @@
     'nonce' => Vite::cspNonce(),
     'swPath' => asset(Config::string('pwa.sw_path', 'sw.js')),
     'debug' => Config::boolean('app.debug', false),
-    'updateInterval' => Config::integer('pwa.update_interval', 8),
+    'updateInterval' => Config::integer('pwa.update_interval', 24),
 ])
 
 <script @isset($nonce) nonce="{{ $nonce }}" @endisset>
