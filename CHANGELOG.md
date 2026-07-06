@@ -2,6 +2,15 @@
 
 All notable changes to `laravel-pwa` will be documented in this file.
 
+## 2.1.0 - 2026-04-09
+
+### What's Changed
+
+* feat: add enabled option to disable PWA and unregister service worker by @francoism90 in https://github.com/foxws/laravel-pwa/pull/6
+* build(deps): bump dependabot/fetch-metadata from 2.5.0 to 3.0.0 by @dependabot[bot] in https://github.com/foxws/laravel-pwa/pull/5
+
+**Full Changelog**: https://github.com/foxws/laravel-pwa/compare/2.0.0...2.1.0
+
 ## 2.0.0 - 2026-03-18
 
 **Full Changelog**: https://github.com/foxws/laravel-pwa/compare/1.9.0...2.0.0
