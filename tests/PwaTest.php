@@ -2,12 +2,14 @@
 
 declare(strict_types=1);
 
+use Foxws\Pwa\Pwa;
 use Foxws\Pwa\Support\CacheKey;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Once;
 
 it('generates manifest.json in the public directory', function () {
     $path = public_path('manifest.json');
@@ -187,4 +189,39 @@ it('omits icons from manifest when icons config is empty', function () {
     $manifest = json_decode(File::get(public_path('manifest.json')), true);
 
     expect($manifest)->not->toHaveKey('icons');
+});
+
+it('suffixes the manifest URL with the file\'s last-modified time', function () {
+    Artisan::call('pwa:generate');
+
+    $expected = File::lastModified(public_path('manifest.json'));
+
+    expect(Pwa::manifestUrl())->toEndWith('/manifest.json?v='.$expected);
+});
+
+it('memoizes the manifest URL for the duration of a request via once()', function () {
+    Artisan::call('pwa:generate');
+
+    $first = Pwa::manifestUrl();
+    touch(public_path('manifest.json'), File::lastModified(public_path('manifest.json')) + 60);
+
+    expect(Pwa::manifestUrl())->toBe($first);
+});
+
+it('changes the manifest URL version on the next request after regenerating the manifest', function () {
+    Artisan::call('pwa:generate');
+    $first = Pwa::manifestUrl();
+
+    // Simulates the request boundary: Octane's FlushOnce listener resets
+    // this cache between requests, so the next request sees the new mtime.
+    Once::flush();
+    touch(public_path('manifest.json'), File::lastModified(public_path('manifest.json')) + 60);
+
+    expect(Pwa::manifestUrl())->not->toBe($first);
+});
+
+it('returns an unversioned manifest URL when the file has not been generated yet', function () {
+    File::delete(public_path('manifest.json'));
+
+    expect(Pwa::manifestUrl())->toBe(asset('manifest.json'));
 });
