@@ -1,12 +1,12 @@
-@use('Illuminate\Support\Facades\Config')
+@use('Foxws\Pwa\Pwa')
 @use('Illuminate\Support\Facades\Vite')
 
 @props([
     'scope' => '/',
     'nonce' => Vite::cspNonce(),
-    'swPath' => asset(Config::string('pwa.sw_path', 'sw.js')),
-    'debug' => Config::boolean('app.debug', false),
-    'updateInterval' => Config::integer('pwa.update_interval', 24),
+    'swPath' => Pwa::swUrl(),
+    'debug' => Pwa::debug(),
+    'updateInterval' => Pwa::updateInterval(),
 ])
 
 <script @isset($nonce) nonce="{{ $nonce }}" @endisset>

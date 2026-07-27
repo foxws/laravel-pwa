@@ -1,9 +1,9 @@
-@use('Illuminate\Support\Facades\Config')
+@use('Foxws\Pwa\Pwa')
 
 @props([
-    'themeColor' => Config::string('pwa.manifest.theme_color', '#000000'),
-    'icon' => asset(Config::string('pwa.apple_touch_icon', 'logo.png')),
-    'manifest' => asset(Config::string('pwa.manifest_path', 'manifest.json')),
+    'themeColor' => Pwa::themeColor(),
+    'icon' => Pwa::appleTouchIcon(),
+    'manifest' => Pwa::manifestUrl(),
 ])
 
 <meta name="theme-color" content="{{ $themeColor }}">
