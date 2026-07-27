@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-pwa` will be documented in this file.
 
+## 2.3.0 - 2026-07-27
+
+### What's Changed
+
+* Refactor to use Pwa facade methods for better encapsulation by @francoism90 in https://github.com/foxws/laravel-pwa/pull/10
+
+**Full Changelog**: https://github.com/foxws/laravel-pwa/compare/2.2.0...2.3.0
+
 ## 2.2.0 - 2026-07-06
 
 ### What's Changed
