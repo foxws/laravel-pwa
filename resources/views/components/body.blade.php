@@ -27,11 +27,11 @@
                         @endif
                     },
                     (error) => {
-                        @if($debug) console.error("Service worker registration failed:", error); @endif
+                        console.error("Service worker registration failed:", error);
                     }
                 );
         });
     } else {
-        @if($debug) console.warn("Service workers are not supported."); @endif
+        console.debug("Service workers are not supported.");
     }
 </script>

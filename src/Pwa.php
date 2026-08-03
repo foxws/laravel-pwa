@@ -43,19 +43,31 @@ class Pwa
      */
     public static function manifestUrl(): string
     {
-        return once(function () {
-            $path = Config::string('pwa.manifest_path', 'manifest.json');
-            $destination = self::destinationPath($path);
-
-            $version = File::exists($destination) ? File::lastModified($destination) : null;
-
-            return filled($version) ? asset($path).'?v='.$version : asset($path);
-        });
+        return once(fn () => self::versionedAssetUrl(Config::string('pwa.manifest_path', 'manifest.json')));
     }
 
+    /**
+     * The service worker URL, suffixed with the file's last-modified time.
+     * `updateViaCache: "none"` should already keep browsers from caching
+     * this script, but some proxies/CDNs cache it anyway, so this guards
+     * against that by changing the URL after every pwa:generate run.
+     */
     public static function swUrl(): string
     {
-        return asset(Config::string('pwa.sw_path', 'sw.js'));
+        return once(fn () => self::versionedAssetUrl(Config::string('pwa.sw_path', 'sw.js')));
+    }
+
+    /**
+     * Builds the public URL for a generated asset, suffixed with its
+     * last-modified time to bust stale caches after each pwa:generate run.
+     */
+    private static function versionedAssetUrl(string $path): string
+    {
+        $destination = self::destinationPath($path);
+
+        $version = File::exists($destination) ? File::lastModified($destination) : null;
+
+        return filled($version) ? asset($path).'?v='.$version : asset($path);
     }
 
     public static function debug(): bool
