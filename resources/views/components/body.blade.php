@@ -13,6 +13,16 @@
     "use strict";
 
     if ("serviceWorker" in navigator) {
+        // A new service worker taking control doesn't refresh the already-loaded
+        // page on its own — reload once so the tab actually runs the new assets
+        // instead of silently continuing to run the old bundle underneath it.
+        let refreshingAfterUpdate = false;
+        navigator.serviceWorker.addEventListener("controllerchange", () => {
+            if (refreshingAfterUpdate) return;
+            refreshingAfterUpdate = true;
+            window.location.reload();
+        });
+
         window.addEventListener("load", () => {
             navigator.serviceWorker
                 .register("{{ $swPath }}", { scope: "{{ $scope }}", updateViaCache: "none" })
@@ -20,10 +30,21 @@
                     (registration) => {
                         @if($debug) console.log("Service worker registration succeeded:", registration); @endif
                         @if($updateInterval > 0)
-                        setInterval(() => {
+                        const checkForUpdate = () => {
                             registration.update();
                             @if($debug) console.log("Service worker update check triggered."); @endif
-                        }, {{ (int) $updateInterval * 60 * 60 * 1000 }});
+                        };
+
+                        setInterval(checkForUpdate, {{ (int) $updateInterval * 60 * 60 * 1000 }});
+
+                        // A tab left open across a release (backgrounded, or restored
+                        // from a previous session) won't hit the interval until it
+                        // elapses — check again as soon as the tab is visible.
+                        document.addEventListener("visibilitychange", () => {
+                            if (document.visibilityState === "visible") {
+                                checkForUpdate();
+                            }
+                        });
                         @endif
                     },
                     (error) => {
