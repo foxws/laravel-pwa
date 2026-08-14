@@ -9,6 +9,8 @@ A minimal, opinionated Progressive Web App (PWA) package for Laravel. It provide
 
 The included service worker uses a network-first strategy for navigation and cache-first for static assets, while intentionally bypassing the cache for [Inertia.js](https://inertiajs.com) (`X-Inertia`) and [Livewire](https://livewire.laravel.com) (`X-Livewire`) requests to prevent stale responses.
 
+Full documentation is available at [foxws.github.io/laravel-pwa](https://foxws.github.io/laravel-pwa/).
+
 ## Installation
 
 ```bash
