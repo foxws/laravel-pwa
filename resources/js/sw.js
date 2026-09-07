@@ -87,6 +87,13 @@ self.addEventListener("fetch", (event) => {
         return;
     }
 
+    // htmx swap requests carry an HX-Request header and must always go to
+    // the network — caching them would serve stale partial content.
+    if (event.request.headers.get("HX-Request")) {
+        event.respondWith(fetch(event.request));
+        return;
+    }
+
     // Generic XHR/fetch requests (e.g. X-Requested-With) bypass the cache.
     if (event.request.headers.get("X-Requested-With")) {
         event.respondWith(fetch(event.request));

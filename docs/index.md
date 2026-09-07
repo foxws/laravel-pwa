@@ -12,8 +12,9 @@ stub.
 
 The included service worker uses a network-first strategy for navigation and
 cache-first for static assets, while intentionally bypassing the cache for
-[Inertia.js](https://inertiajs.com) (`X-Inertia`) and
-[Livewire](https://livewire.laravel.com) (`X-Livewire`, `X-Livewire-Navigate`)
-requests to prevent stale responses.
+[Inertia.js](https://inertiajs.com) (`X-Inertia`),
+[Livewire](https://livewire.laravel.com) (`X-Livewire`, `X-Livewire-Navigate`),
+and [htmx](https://htmx.org) (`HX-Request`) requests to prevent stale
+responses.
 
 Continue to [Installation](./installation.md) to get started.
