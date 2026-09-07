@@ -2,6 +2,20 @@
 
 All notable changes to `laravel-pwa` will be documented in this file.
 
+## 2.5.1 - 2026-09-07
+
+### What's Changed
+
+* Add Docusaurus documentation site by @francoism90 in https://github.com/foxws/laravel-pwa/pull/11
+* build(deps): bump actions/checkout from 4 to 7 by @dependabot[bot] in https://github.com/foxws/laravel-pwa/pull/16
+* build(deps): bump actions/upload-pages-artifact from 3 to 5 by @dependabot[bot] in https://github.com/foxws/laravel-pwa/pull/15
+* build(deps): bump actions/setup-node from 4 to 7 by @dependabot[bot] in https://github.com/foxws/laravel-pwa/pull/14
+* build(deps): bump pnpm/action-setup from 4 to 6 by @dependabot[bot] in https://github.com/foxws/laravel-pwa/pull/13
+* build(deps): bump actions/deploy-pages from 4 to 5 by @dependabot[bot] in https://github.com/foxws/laravel-pwa/pull/12
+* Fix/livewire navigate sw bypass by @francoism90 in https://github.com/foxws/laravel-pwa/pull/17
+
+**Full Changelog**: https://github.com/foxws/laravel-pwa/compare/2.5.0...2.5.1
+
 ## 2.5.0 - 2026-08-07
 
 **Full Changelog**: https://github.com/foxws/laravel-pwa/compare/2.4.0...2.5.0
