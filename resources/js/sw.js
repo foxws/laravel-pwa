@@ -80,6 +80,20 @@ self.addEventListener("fetch", (event) => {
         return;
     }
 
+    // wire:navigate page requests fetch fresh HTML to swap into the DOM and
+    // must always go to the network — caching them would serve stale pages.
+    if (event.request.headers.get("X-Livewire-Navigate")) {
+        event.respondWith(fetch(event.request));
+        return;
+    }
+
+    // htmx swap requests carry an HX-Request header and must always go to
+    // the network — caching them would serve stale partial content.
+    if (event.request.headers.get("HX-Request")) {
+        event.respondWith(fetch(event.request));
+        return;
+    }
+
     // Generic XHR/fetch requests (e.g. X-Requested-With) bypass the cache.
     if (event.request.headers.get("X-Requested-With")) {
         event.respondWith(fetch(event.request));
