@@ -1,14 +1,17 @@
 ---
-sidebar_position: 2
+section: Getting Started
+order: 1
 ---
 
 # Installation
+
+Install the package with Composer:
 
 ```bash
 composer require foxws/laravel-pwa
 ```
 
-Publish the config file:
+Then publish the config file:
 
 ```bash
 php artisan vendor:publish --tag="pwa-config"

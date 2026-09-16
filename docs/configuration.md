@@ -1,10 +1,15 @@
 ---
-sidebar_position: 4
+section: Reference
+order: 1
 ---
 
 # Configuration
 
-```php title="config/pwa.php"
+This is the full config file, published to `config/pwa.php`:
+
+```php
+// config/pwa.php
+
 return [
     'enabled'       => env('PWA_ENABLED', true),
     'manifest_path' => env('PWA_MANIFEST_PATH', 'manifest.json'),
@@ -45,6 +50,7 @@ return [
 ];
 ```
 
-Any key set to `null` in the manifest array is omitted from the generated
-JSON. Advanced keys such as `shortcuts`, `screenshots`, and `categories` can
-be added to the manifest array as needed.
+Any manifest key set to `null` is left out of the generated
+`manifest.json`. You can add more keys too, such as `shortcuts`,
+`screenshots`, or `categories` — the package includes whatever you put
+in the `manifest` array.
