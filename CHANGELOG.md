@@ -2,6 +2,15 @@
 
 All notable changes to `laravel-pwa` will be documented in this file.
 
+## 2.5.2 - 2026-09-16
+
+### What's Changed
+
+* build(deps): bump react from 19.2.8 to 19.3.0 in /website by @dependabot[bot] in https://github.com/foxws/laravel-pwa/pull/18
+* docs: switch front matter to laravel-docs format, simplify prose by @francoism90 in https://github.com/foxws/laravel-pwa/pull/19
+
+**Full Changelog**: https://github.com/foxws/laravel-pwa/compare/2.5.1...2.5.2
+
 ## 2.5.1 - 2026-09-07
 
 ### What's Changed
