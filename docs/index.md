@@ -2,6 +2,7 @@
 title: Introduction
 metadata:
   role: Progressive Web App
+  group: deploy
   eyebrow: "PWA · Service Worker · Manifest"
   desc: "Turn your Laravel app into an installable, offline-friendly PWA."
   requires: "PHP ^8.3"
