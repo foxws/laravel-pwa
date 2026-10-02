@@ -5,34 +5,56 @@ metadata:
   group: deploy
   eyebrow: "PWA · Service Worker · Manifest"
   desc: "Turn your Laravel app into an installable, offline-friendly PWA."
+  lead: "Make your Laravel app installable, with a manifest, icons and a service worker that never serves stale Inertia, Livewire or htmx responses."
   requires: "PHP ^8.3"
   laravel: "12.x / 13.x"
   licence: MIT
+  used_by:
+    name: Stry
+    desc: "A self-hosted video streaming app."
+    href: "https://github.com/francoism90/stry"
 ---
 
 # Introduction
 
-Laravel PWA turns your Laravel app into a Progressive Web App (PWA). It's
-small and opinionated, so there isn't much to set up.
+Laravel PWA turns your Laravel app into a Progressive Web App (PWA): people can install it on their phone or desktop, like a native app. It's small and opinionated, so there's little to set up.
 
-It gives you:
+Add two Blade directives to your layout:
 
-- Blade directives that add the PWA head tags and register the service
-  worker.
-- An Artisan command that generates your `manifest.json` file and publishes
-  a `sw.js` service worker.
+```blade
+<head>
+    @pwaHead
+</head>
 
-The service worker keeps things fast without showing stale content:
+<body>
+    ...
+    @pwaSw
+</body>
+```
 
-- Pages are always fetched from the network first, so users see the latest
-  version.
-- Static assets, like images and scripts, are served from the cache first,
-  so they load quickly.
+Then generate the manifest and the service worker:
 
-It also skips the cache for requests from
-[Inertia.js](https://inertiajs.com) (`X-Inertia`),
-[Livewire](https://livewire.laravel.com) (`X-Livewire`,
-`X-Livewire-Navigate`), and [htmx](https://htmx.org) (`HX-Request`), so
-these frameworks never receive a stale, cached response.
+```bash
+php artisan pwa:generate
+```
 
-Continue to [Installation](./installation.md) to get started.
+## What the service worker does
+
+It keeps your app fast without ever showing stale content:
+
+- Pages always come from the network first, so people see the latest version.
+- Static files, like images and scripts, come from the cache first, so they load quickly.
+- Requests from [Inertia.js](https://inertiajs.com), [Livewire](https://livewire.laravel.com) and [htmx](https://htmx.org) skip the cache entirely, so these frameworks never get an old response.
+
+## Installation
+
+```bash
+composer require foxws/laravel-pwa
+php artisan vendor:publish --tag="pwa-config"
+```
+
+## Learn more
+
+- [Installation](installation.md)
+- [Usage](usage.md): the Blade directives, icons and the manifest.
+- [Configuration](configuration.md): every option in `config/pwa.php`.
