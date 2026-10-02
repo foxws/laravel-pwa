@@ -21,6 +21,12 @@ it('generates manifest.json in the public directory', function () {
     expect(File::exists($path))->toBeTrue();
 });
 
+it('fails instead of writing an empty manifest when a value cannot be encoded', function () {
+    config()->set('pwa.manifest.name', "\xB1\x31");
+
+    Artisan::call('pwa:generate');
+})->throws(JsonException::class);
+
 it('manifest.json contains required keys', function () {
     Artisan::call('pwa:generate');
 
