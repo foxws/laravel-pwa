@@ -47,7 +47,8 @@ class GenerateManifest
         // Ensure the output directory exists before writing the manifest file
         File::ensureDirectoryExists(dirname($path));
 
-        // Write the manifest.json file with pretty formatting and unescaped slashes/unicode
-        File::put($path, json_encode($contents, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+        // Write the manifest.json file with pretty formatting and unescaped slashes/unicode,
+        // failing loudly instead of writing an empty file when a value can't be encoded
+        File::put($path, json_encode($contents, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR));
     }
 }
