@@ -2,6 +2,15 @@
 
 All notable changes to `laravel-pwa` will be documented in this file.
 
+## 2.5.3 - 2026-10-02
+
+### What's Changed
+
+* docs: add the foxws.nl homepage group, a hero lead and a clearer introduction by @francoism90 in https://github.com/foxws/laravel-pwa/pull/20
+* Raise PHPStan to level 8, and fail on manifest JSON errors by @francoism90 in https://github.com/foxws/laravel-pwa/pull/21
+
+**Full Changelog**: https://github.com/foxws/laravel-pwa/compare/2.5.2...2.5.3
+
 ## 2.5.2 - 2026-09-16
 
 ### What's Changed
