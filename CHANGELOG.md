@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-pwa` will be documented in this file.
 
+## 2.6.0 - 2026-10-14
+
+### What's Changed
+
+* Add Laravel Boost skill and tip by @francoism90 in https://github.com/foxws/laravel-pwa/pull/22
+
+**Full Changelog**: https://github.com/foxws/laravel-pwa/compare/2.5.3...2.6.0
+
 ## 2.5.3 - 2026-10-02
 
 ### What's Changed
