@@ -35,4 +35,14 @@ It also skips the cache for requests from
 `X-Livewire-Navigate`), and [htmx](https://htmx.org) (`HX-Request`), so
 these frameworks never receive a stale, cached response.
 
+> [!TIP]
+> Let your AI agent do the hard parts. This package ships a [Laravel Boost](https://laravel.com/docs/boost) skill, `pwa-development`, that teaches your agent how to install, configure and use Laravel PWA. Install Boost and select the skill when prompted:
+>
+> ```bash
+> composer require laravel/boost --dev
+> php artisan boost:install
+> ```
+>
+> Already using Boost? Run `php artisan boost:update --discover` to pick up the skill. Then just ask, for example: *"Turn this app into an installable PWA with our logo as the app icon."*
+
 Continue to [Installation](./installation.md) to get started.
