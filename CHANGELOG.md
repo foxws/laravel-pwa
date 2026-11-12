@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-pwa` will be documented in this file.
 
+## 2.7.1 - 2026-11-12
+
+### What's Changed
+
+* Read PWA_IGNORE_PATHS as a comma-separated list and encode the paths as JavaScript strings by @francoism90 in https://github.com/foxws/laravel-pwa/pull/24
+
+**Full Changelog**: https://github.com/foxws/laravel-pwa/compare/2.7.0...2.7.1
+
 ## 2.7.0 - 2026-11-12
 
 ### What's Changed
