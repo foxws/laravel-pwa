@@ -19,11 +19,28 @@ class Pwa
         return public_path($path);
     }
 
+    /**
+     * The ignored path prefixes as JavaScript string literals, for the service
+     * worker's IGNORED_PATHS array. The config value is a list, or a
+     * comma-separated string from the PWA_IGNORE_PATHS env variable.
+     */
     public static function ignorePaths(): string
     {
-        $paths = Config::array('pwa.ignore_paths', []);
+        $paths = Config::get('pwa.ignore_paths', []);
 
-        return implode(', ', array_map(fn (string $path): string => "'{$path}'", $paths));
+        if (is_string($paths)) {
+            $paths = explode(',', $paths);
+        }
+
+        $paths = array_filter(array_map(
+            fn (mixed $path): string => is_scalar($path) ? trim((string) $path) : '',
+            (array) $paths,
+        ));
+
+        return implode(', ', array_map(
+            fn (string $path): string => json_encode($path, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR),
+            $paths,
+        ));
     }
 
     public static function themeColor(): string

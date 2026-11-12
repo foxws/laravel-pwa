@@ -266,3 +266,18 @@ it('disables the PWA by default only when APP_ENV is local', function (string $e
     'production' => ['production', true],
     'staging' => ['staging', true],
 ]);
+
+it('injects the ignored paths into sw.js as JavaScript strings', function () {
+    config()->set('pwa.ignore_paths', ['/api/', "/it's/"]);
+
+    Artisan::call('pwa:generate');
+
+    expect(File::get(public_path('sw.js')))
+        ->toContain('const IGNORED_PATHS = ["/api/", "/it\'s/"];');
+});
+
+it('reads the ignored paths from a comma-separated string', function () {
+    config()->set('pwa.ignore_paths', ' /api/, /admin/ ,');
+
+    expect(Pwa::ignorePaths())->toBe('"/api/", "/admin/"');
+});

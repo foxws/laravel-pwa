@@ -40,6 +40,7 @@ return [
     | Define URL path prefixes that the service worker should never intercept
     | or cache. Any request whose pathname starts with one of these values
     | will be passed directly to the network, bypassing all SW logic.
+    | PWA_IGNORE_PATHS takes a comma-separated list, e.g. "/api/,/admin/".
     |
     */
 
