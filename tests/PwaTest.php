@@ -128,6 +128,20 @@ it('renders @pwaSw directive', function () {
         ->toContain('.register(');
 });
 
+it('marks the @pwaSw script to run once across wire:navigate visits', function () {
+    $view = Blade::render('@pwaSw');
+
+    expect($view)->toContain('<script data-navigate-once');
+});
+
+it('renders the service worker URL as a JavaScript string without HTML escaping', function () {
+    $view = Blade::render("@pwaSw(['swPath' => '/sw.js?v=1&debug=1'])");
+
+    expect($view)
+        ->toContain(".register('\/sw.js?v=1\u0026debug=1'")
+        ->not->toContain('&amp;');
+});
+
 it('resolves icon src via storage disk url', function () {
     Storage::fake('public');
 
