@@ -103,8 +103,10 @@ for a starting point.
 
 ## Disabling the service worker
 
-Set `PWA_ENABLED=false` in your `.env` file to turn off the service
-worker, for example in local or staging environments:
+The service worker is disabled by default when `APP_ENV` is `local`, so
+it can't cache assets from the Vite dev server. Set `PWA_ENABLED=false`
+in your `.env` file to turn it off in other environments, such as
+staging, or `PWA_ENABLED=true` to test the PWA locally:
 
 ```env
 PWA_ENABLED=false

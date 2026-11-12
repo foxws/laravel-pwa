@@ -1,8 +1,21 @@
 "use strict";
 
+const CACHE_PREFIX = "sw-";
 const CACHE_KEY = "CACHE_KEY_PLACEHOLDER";
 const IGNORED_PATHS = [IGNORED_PATHS_PLACEHOLDER];
 const OFFLINE_URL = "/offline.html";
+
+/**
+ * Requests carrying one of these headers are XHR/fetch calls whose responses
+ * must never be cached: Inertia, Livewire, wire:navigate, htmx and generic XHR.
+ */
+const BYPASS_HEADERS = [
+    "X-Inertia",
+    "X-Livewire",
+    "X-Livewire-Navigate",
+    "HX-Request",
+    "X-Requested-With",
+];
 
 self.addEventListener("install", (event) => {
     // Precache the offline fallback page so it is always available.
@@ -10,23 +23,27 @@ self.addEventListener("install", (event) => {
     event.waitUntil(
         caches
             .open(CACHE_KEY)
-            .then((cache) => cache.add(OFFLINE_URL).catch(() => { }))
+            .then((cache) => cache.add(OFFLINE_URL).catch(() => {}))
             .then(() => self.skipWaiting()),
     );
 });
 
 self.addEventListener("activate", (event) => {
     event.waitUntil(
-        caches
-            .keys()
-            .then((keys) =>
-                Promise.all(
-                    keys
-                        .filter((key) => key !== CACHE_KEY)
-                        .map((key) => caches.delete(key)),
+        Promise.all([
+            // Only remove caches this worker created, never the app's own caches.
+            caches
+                .keys()
+                .then((keys) =>
+                    Promise.all(
+                        keys
+                            .filter((key) => key.startsWith(CACHE_PREFIX) && key !== CACHE_KEY)
+                            .map((key) => caches.delete(key)),
+                    ),
                 ),
-            )
-            .then(() => self.clients.claim()),
+            // Start page requests while the worker boots instead of after it.
+            self.registration.navigationPreload?.enable(),
+        ]).then(() => self.clients.claim()),
     );
 });
 
@@ -50,61 +67,44 @@ function isCacheable(response) {
         return false;
     }
 
-    return true;
+    return response.headers.get("vary") !== "*";
+}
+
+function offlineResponse() {
+    return caches
+        .match(OFFLINE_URL)
+        .then((cached) => cached ?? Response.error());
 }
 
 self.addEventListener("fetch", (event) => {
-    if (event.request.method !== "GET") return;
+    const { request } = event;
+
+    if (request.method !== "GET") return;
+
+    // Chrome throws on these when they are refetched from a service worker.
+    if (request.cache === "only-if-cached" && request.mode !== "same-origin") return;
+
+    // Returning without respondWith() hands the request back to the browser,
+    // which is cheaper than piping it through fetch() in the worker.
 
     // Bypass the service worker entirely for ignored path prefixes (e.g. /api/).
-    const requestPath = new URL(event.request.url).pathname;
-    if (IGNORED_PATHS.some((prefix) => requestPath.startsWith(prefix))) return;
+    const url = new URL(request.url);
+    if (IGNORED_PATHS.some((prefix) => url.pathname.startsWith(prefix))) return;
 
     // Range requests (e.g. video/audio streaming chunks) must bypass the cache —
     // returning a full cached response for a partial request breaks media seeking.
-    if (event.request.headers.get("Range")) {
-        event.respondWith(fetch(event.request));
-        return;
-    }
+    if (request.headers.has("Range")) return;
 
-    // Inertia XHR requests carry an X-Inertia header and must always go to
-    // the network — caching their JSON responses would cause stale page data.
-    if (event.request.headers.get("X-Inertia")) {
-        event.respondWith(fetch(event.request));
-        return;
-    }
-
-    // Livewire component requests must always go to the network.
-    if (event.request.headers.get("X-Livewire")) {
-        event.respondWith(fetch(event.request));
-        return;
-    }
-
-    // wire:navigate page requests fetch fresh HTML to swap into the DOM and
-    // must always go to the network — caching them would serve stale pages.
-    if (event.request.headers.get("X-Livewire-Navigate")) {
-        event.respondWith(fetch(event.request));
-        return;
-    }
-
-    // htmx swap requests carry an HX-Request header and must always go to
-    // the network — caching them would serve stale partial content.
-    if (event.request.headers.get("HX-Request")) {
-        event.respondWith(fetch(event.request));
-        return;
-    }
-
-    // Generic XHR/fetch requests (e.g. X-Requested-With) bypass the cache.
-    if (event.request.headers.get("X-Requested-With")) {
-        event.respondWith(fetch(event.request));
-        return;
-    }
+    // XHR/fetch calls from Inertia, Livewire and htmx would serve stale data.
+    if (BYPASS_HEADERS.some((header) => request.headers.has(header))) return;
 
     // Use network-first for navigation requests (HTML pages) so the server
     // always has the final say. Fall back to the offline page when offline.
-    if (event.request.mode === "navigate") {
+    if (request.mode === "navigate") {
         event.respondWith(
-            fetch(event.request).catch(() => caches.match(OFFLINE_URL)),
+            Promise.resolve(event.preloadResponse)
+                .then((preloaded) => preloaded ?? fetch(request))
+                .catch(() => offlineResponse()),
         );
         return;
     }
@@ -112,17 +112,22 @@ self.addEventListener("fetch", (event) => {
     // Cache-first for static assets (JS, CSS, images, fonts, etc.).
     // Only store valid responses; fall back gracefully when offline.
     event.respondWith(
-        caches.match(event.request).then((cached) => {
+        caches.match(request).then((cached) => {
             if (cached) return cached;
 
-            return fetch(event.request)
+            return fetch(request)
                 .then((response) => {
                     if (isCacheable(response)) {
                         const clone = response.clone();
 
-                        caches
-                            .open(CACHE_KEY)
-                            .then((cache) => cache.put(event.request, clone));
+                        // Keep the worker alive until the write finishes; ignore
+                        // quota errors so a full cache never breaks the response.
+                        event.waitUntil(
+                            caches
+                                .open(CACHE_KEY)
+                                .then((cache) => cache.put(request, clone))
+                                .catch(() => {}),
+                        );
                     }
 
                     return response;

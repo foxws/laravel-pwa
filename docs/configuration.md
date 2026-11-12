@@ -11,7 +11,7 @@ This is the full config file, published to `config/pwa.php`:
 // config/pwa.php
 
 return [
-    'enabled'       => env('PWA_ENABLED', true),
+    'enabled'       => env('PWA_ENABLED', env('APP_ENV') !== 'local'),
     'manifest_path' => env('PWA_MANIFEST_PATH', 'manifest.json'),
     'sw_path'       => env('PWA_SW_PATH', 'sw.js'),
     'ignore_paths'  => ['/api/', '/livewire/', '/_inertia/'],
