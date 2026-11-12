@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-pwa` will be documented in this file.
 
+## 2.7.0 - 2026-11-12
+
+### What's Changed
+
+* Fix service worker bugs and disable the PWA by default in local by @francoism90 in https://github.com/foxws/laravel-pwa/pull/23
+
+**Full Changelog**: https://github.com/foxws/laravel-pwa/compare/2.6.0...2.7.0
+
 ## 2.6.0 - 2026-10-14
 
 ### What's Changed
