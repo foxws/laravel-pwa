@@ -245,3 +245,24 @@ it('returns an unversioned manifest URL when the file has not been generated yet
 
     expect(Pwa::manifestUrl())->toBe(asset('manifest.json'));
 });
+
+it('disables the PWA by default only when APP_ENV is local', function (string $environment, bool $enabled) {
+    $previous = $_SERVER['APP_ENV'] ?? null;
+    $_SERVER['APP_ENV'] = $environment;
+
+    try {
+        $config = require Pwa::basePath('config/pwa.php');
+    } finally {
+        if ($previous === null) {
+            unset($_SERVER['APP_ENV']);
+        } else {
+            $_SERVER['APP_ENV'] = $previous;
+        }
+    }
+
+    expect($config['enabled'])->toBe($enabled);
+})->with([
+    'local' => ['local', false],
+    'production' => ['production', true],
+    'staging' => ['staging', true],
+]);

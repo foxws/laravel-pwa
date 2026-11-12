@@ -109,7 +109,7 @@ The service worker serves an offline fallback page from `public/offline.html`. Y
 
 ### Disabling the service worker
 
-Set `PWA_ENABLED=false` in your `.env` to disable the service worker in local or staging environments. When disabled, `pwa:generate` writes a self-unregistering service worker instead — on the next page load, any previously installed SW will silently clear its caches and remove itself. No Blade changes are required.
+The service worker is disabled by default when `APP_ENV` is `local`, so it can't cache assets from the Vite dev server. Set `PWA_ENABLED=false` in your `.env` to disable it in other environments, such as staging, or `PWA_ENABLED=true` to test the PWA locally. When disabled, `pwa:generate` writes a self-unregistering service worker instead — on the next page load, any previously installed SW will silently clear its caches and remove itself. No Blade changes are required.
 
 ```env
 PWA_ENABLED=false
@@ -123,7 +123,7 @@ The `@pwaHead` directive and `manifest.json` are unaffected; only the service wo
 // config/pwa.php
 
 return [
-    'enabled'       => env('PWA_ENABLED', true),
+    'enabled'       => env('PWA_ENABLED', env('APP_ENV') !== 'local'),
     'manifest_path' => env('PWA_MANIFEST_PATH', 'manifest.json'),
     'sw_path'       => env('PWA_SW_PATH', 'sw.js'),
     'ignore_paths'  => ['/api/', '/livewire/', '/_inertia/'],
