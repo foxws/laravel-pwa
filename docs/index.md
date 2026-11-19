@@ -6,7 +6,7 @@ metadata:
   eyebrow: "PWA · Service Worker · Manifest"
   desc: "Turn your Laravel app into an installable, offline-friendly PWA."
   requires: "PHP ^8.5"
-  laravel: "12.x / 13.x"
+  laravel: "13.x"
   licence: MIT
 ---
 
